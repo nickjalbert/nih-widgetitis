@@ -1,0 +1,89 @@
+#!/usr/local/bin/python2.7
+
+# Common git/github tasks at your fingertips
+
+import sys
+import os
+import argparse
+from subprocess import check_output
+from collections import namedtuple
+
+
+BranchListing = namedtuple('BranchListing', ['commit_hash', 'full_ref_path', 'name', 'index'])
+
+def get_recent_branch_list():
+    recent_branches = check_output(['git', 'for-each-ref', '--sort=-committerdate', 'refs/heads/'])
+    recent_branches = recent_branches.split('\n')
+    recent_branches = [rb.split() for rb in  recent_branches]
+    recent_branches = [ BranchListing(rb[0], rb[2], os.path.basename(rb[2]), i)
+                        for i, rb in enumerate(recent_branches, 1) if len(rb) > 0]
+    return recent_branches
+
+def main():
+    parser = argparse.ArgumentParser(description="github shortcuts")
+    parser.add_argument("--compare", "-c", help="open the github comparison for the branch", action="store_true", default=None)
+    parser.add_argument("--pr", "-p", help="opens the github pull request for the branch", action="store_true", default=None)
+    parser.add_argument("--recent", "-r", help="lists recently modified branch names", action="count", default=None)
+    parser.add_argument("--commit", "-cl", help="opens a link to the current commit", action="store_true", default=None)
+    parser.add_argument("--file", "-f", help="opens a link to the current file", action="store", default=None)
+    parser.add_argument("--line", "-l", help="Use with -f to link to a specific line", action="store", default=None)
+    parser.add_argument("--quick-switch", "-q", help="switch to the branch index (-r)", action="store", default=0)
+    args = parser.parse_args()
+
+    HOST_BASE = 'https://github.com/'
+    remotes = check_output(["git", "remote", "-v"]).strip().split('\n')
+    push_remote = [remote for remote in remotes if 'push' in remote]
+    repo_url = push_remote[0].split()[1]
+    # Hack off github and .git
+    repo = repo_url.split(':')[1][:-4]
+    url_base = HOST_BASE + repo
+
+
+
+    branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
+    commit_hash = check_output(['git', 'rev-parse', 'HEAD']).strip()
+    if args.compare:
+        check_output(['open', '%s/compare/master...%s' % (url_base, branch_name)])
+
+    elif args.pr:
+        check_output(['open', '%s/pull/new/%s' % (url_base, branch_name)])
+
+    elif args.recent:
+        branch_count = args.recent * 10
+        for branch_listing in get_recent_branch_list()[:branch_count]:
+            print "%s (%s)" % (branch_listing.name, branch_listing.index)
+
+    elif args.commit:
+        check_output(['open', '%s/commit/%s' % (url_base, commit_hash)])
+
+    elif args.quick_switch:
+        branch_name = 'master'
+        for branch_listing in get_recent_branch_list():
+            if branch_listing.index == int(args.quick_switch):
+                branch_name = branch_listing.name
+                break
+        check_output(['git', 'checkout', branch_name])
+
+    elif args.file:
+        if not os.path.isfile(args.file):
+            raise Exception('Error: file not found %s' % args.file)
+        current_path = os.getcwd()
+        while current_path != '/':
+            current_path, prepend = os.path.split(current_path)
+            args.file = os.sep.join([prepend, args.file])
+            if os.path.isdir(os.sep.join([current_path, '.git'])):
+                break
+        else:
+            raise Exception('Error: could not find git root')
+        url = '%s/blob/%s/%s' % (url_base, branch_name, args.file)
+        if args.line:
+            url = url + "#L%s" % args.line
+        check_output(['open', url])
+
+    else:
+        parser.print_help()
+
+
+if __name__ == '__main__':
+    main()
+
