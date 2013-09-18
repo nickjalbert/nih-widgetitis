@@ -2,7 +2,6 @@
 
 # Common git/github tasks at your fingertips
 
-import sys
 import os
 import argparse
 from subprocess import check_output
@@ -23,6 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description="github shortcuts")
     parser.add_argument("--compare", "-c", help="open the github comparison for the branch", action="store_true", default=None)
     parser.add_argument("--pr", "-p", help="opens the github pull request for the branch", action="store_true", default=None)
+    parser.add_argument("--tree", "-t", help="opens the github tree view for the branch", action="store_true", default=None)
     parser.add_argument("--recent", "-r", help="lists recently modified branch names", action="count", default=None)
     parser.add_argument("--commit", "-cl", help="opens a link to the current commit", action="store_true", default=None)
     parser.add_argument("--file", "-f", help="opens a link to the current file", action="store", default=None)
@@ -44,6 +44,9 @@ def main():
     commit_hash = check_output(['git', 'rev-parse', 'HEAD']).strip()
     if args.compare:
         check_output(['open', '%s/compare/master...%s' % (url_base, branch_name)])
+
+    elif args.tree:
+        check_output(['open', '%s/tree/%s' % (url_base, branch_name)])
 
     elif args.pr:
         check_output(['open', '%s/pull/new/%s' % (url_base, branch_name)])
