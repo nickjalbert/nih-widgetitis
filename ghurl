@@ -8,6 +8,7 @@ from subprocess import check_output
 from collections import namedtuple
 
 
+EMPTY = 3337
 BranchListing = namedtuple('BranchListing', ['commit_hash', 'full_ref_path', 'name', 'index'])
 
 def get_recent_branch_list():
@@ -18,6 +19,12 @@ def get_recent_branch_list():
                         for i, rb in enumerate(recent_branches, 1) if len(rb) > 0]
     return recent_branches
 
+def print_recent_branch_list(branch_count):
+    for branch_listing in get_recent_branch_list()[:branch_count]:
+        print "%s (%s)" % (branch_listing.name, branch_listing.index)
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="github shortcuts")
     parser.add_argument("--compare", "-c", help="open the github comparison for the branch", action="store_true", default=None)
@@ -27,7 +34,7 @@ def main():
     parser.add_argument("--commit", "-cl", help="opens a link to the current commit", action="store_true", default=None)
     parser.add_argument("--file", "-f", help="opens a link to the current file", action="store", default=None)
     parser.add_argument("--line", "-l", help="Use with -f to link to a specific line", action="store", default=None)
-    parser.add_argument("--quick-switch", "-q", help="switch to the branch index (-r)", action="store", default=0)
+    parser.add_argument("--quick-switch", "-q", nargs="?", const=EMPTY, help="switch to the branch index (-r)", action="store", default=0)
     args = parser.parse_args()
 
     HOST_BASE = 'https://github.com/'
@@ -37,8 +44,6 @@ def main():
     # Hack off github and .git
     repo = repo_url.split(':')[1][:-4]
     url_base = HOST_BASE + repo
-
-
 
     branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
     commit_hash = check_output(['git', 'rev-parse', 'HEAD']).strip()
@@ -51,21 +56,22 @@ def main():
     elif args.pr:
         check_output(['open', '%s/pull/new/%s' % (url_base, branch_name)])
 
-    elif args.recent:
-        branch_count = args.recent * 10
-        for branch_listing in get_recent_branch_list()[:branch_count]:
-            print "%s (%s)" % (branch_listing.name, branch_listing.index)
-
-    elif args.commit:
-        check_output(['open', '%s/commit/%s' % (url_base, commit_hash)])
-
     elif args.quick_switch:
+        if args.quick_switch == EMPTY:
+            print_recent_branch_list(10)
+            return
         branch_name = 'master'
         for branch_listing in get_recent_branch_list():
             if branch_listing.index == int(args.quick_switch):
                 branch_name = branch_listing.name
                 break
         check_output(['git', 'checkout', branch_name])
+
+    elif args.recent:
+        print_recent_branch_list(args.recent * 10)
+
+    elif args.commit:
+        check_output(['open', '%s/commit/%s' % (url_base, commit_hash)])
 
     elif args.file:
         if not os.path.isfile(args.file):
