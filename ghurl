@@ -13,7 +13,7 @@ BranchListing = namedtuple('BranchListing', ['commit_hash', 'full_ref_path', 'na
 
 def get_recent_branch_list():
     recent_branches = check_output(['git', 'for-each-ref', '--sort=-committerdate', 'refs/heads/'])
-    recent_branches = recent_branches.split('\n')
+    recent_branches = recent_branches.decode().split('\n')
     recent_branches = [rb.split() for rb in  recent_branches]
     recent_branches = [ BranchListing(rb[0], rb[2], os.path.basename(rb[2]), i)
                         for i, rb in enumerate(recent_branches, 1) if len(rb) > 0]
@@ -21,7 +21,7 @@ def get_recent_branch_list():
 
 def print_recent_branch_list(branch_count):
     for branch_listing in get_recent_branch_list()[:branch_count]:
-        print "%s (%s)" % (branch_listing.name, branch_listing.index)
+        print("{} ({})".format(branch_listing.name, branch_listing.index))
 
 
 
@@ -38,23 +38,23 @@ def main():
     args = parser.parse_args()
 
     HOST_BASE = 'https://github.com/'
-    remotes = check_output(["git", "remote", "-v"]).strip().split('\n')
+    remotes = check_output(["git", "remote", "-v"]).decode().strip().split('\n')
     push_remote = [remote for remote in remotes if 'push' in remote]
     repo_url = push_remote[0].split()[1]
     # Hack off github and .git
     repo = repo_url.split(':')[1][:-4]
     url_base = HOST_BASE + repo
 
-    branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
-    commit_hash = check_output(['git', 'rev-parse', 'HEAD']).strip()
+    branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip()
+    commit_hash = check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
     if args.compare:
-        check_output(['open', '%s/compare/master...%s' % (url_base, branch_name)])
+        check_output(['open', '{}/compare/master...{}'.format(url_base, branch_name)])
 
     elif args.tree:
-        check_output(['open', '%s/tree/%s' % (url_base, branch_name)])
+        check_output(['open', '{}/tree/{}'.format(url_base, branch_name)])
 
     elif args.pr:
-        check_output(['open', '%s/pull/new/%s' % (url_base, branch_name)])
+        check_output(['open', '{}/pull/new/{}'.format(url_base, branch_name)])
 
     elif args.quick_switch:
         if args.quick_switch == EMPTY:
