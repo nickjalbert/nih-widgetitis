@@ -39,7 +39,8 @@ def main():
 
     HOST_BASE = 'https://github.com/'
     remotes = check_output(["git", "remote", "-v"]).decode().strip().split('\n')
-    push_remote = [remote for remote in remotes if 'push' in remote]
+    push_remote = [remote for remote in remotes
+                   if ('push' in remote and 'github' in remote)]
     repo_url = push_remote[0].split()[1]
     # Hack off github and .git
     repo = repo_url.split(':')[1][:-4]
