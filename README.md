@@ -8,3 +8,11 @@ Small scripts and other haphazard bits
 ```
 ln -s /Users/nickj/captricity/nih-widgetitis/ghurl /usr/local/bin/
 ```
+
+### Bash config
+
+```
+rm ~/.bashrc
+ln -s `pwd`/bash/.bashrc ~/.bashrc
+rm ~/.bash_profile
+ln -s `pwd`/bash/.bash_profile ~/.bash_profile
