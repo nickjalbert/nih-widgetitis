@@ -16,8 +16,9 @@ alias ggpur='git pull --rebase'
 alias ggpun='git pull'
 alias ggcl='git clone'
 
-# Working alias
+# Working aliases
 alias qwe='cd sifive/www-sifive/'
+alias asd='cd sifive/documentation-experiments/end_to_end/sifivedoc/; workon doc3'
 
 # Bash options
 shopt -s histappend
