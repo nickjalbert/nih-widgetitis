@@ -16,6 +16,9 @@ alias ggpur='git pull --rebase'
 alias ggpun='git pull'
 alias ggcl='git clone'
 
+# Working alias
+alias qwe='cd sifive/www-sifive/'
+
 # Bash options
 shopt -s histappend
 export HISTIGNORE="ignoredups:&:ls:[bf]g:exit"
@@ -26,7 +29,7 @@ shopt -s checkwinsize
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Environment
-export PATH=$PATH
+export PATH=$HOME/Library/Python/2.7/bin/:$PATH
 
 # Virtual env
 if [ ! -e $HOME/.virtualenvs ]; then
@@ -58,11 +61,10 @@ if [ ! -e $PYTHONSTARTUP ]; then
     echo "del os, hist" >> $PYTHONSTARTUP
 fi
 
-
 # Vi key bindings etc
 if [ ! -e $HOME/.editrc ]; then
     echo "bind -v" > $HOME/.editrc
-fi 
+fi
 
 if [ ! -e $HOME/.inputrc ]; then
     echo "set editing-mode vi" > $HOME/.inputrc
@@ -87,5 +89,4 @@ if [ ! -e $HOME/.gitconfig ]; then
     git config --global color.diff.whitespace "red reverse"
     git config --bool --global diff-so-fancy.changeHunkIndicators true
     git config --bool --global diff-so-fancy.stripLeadingSymbols true
-fi 
-
+fi
