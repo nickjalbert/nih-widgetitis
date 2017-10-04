@@ -18,7 +18,8 @@ alias ggcl='git clone'
 
 # Working aliases
 alias qwe='cd sifive/www-sifive/'
-alias asd='cd sifive/documentation-experiments/end_to_end/sifivedoc/; workon doc3'
+alias asd='cd sifive/documentation-experiments/sifivedoc/; workon doc3'
+alias sdf='cd datascience.edu/; workon datascience.edu'
 
 # Bash options
 shopt -s histappend
