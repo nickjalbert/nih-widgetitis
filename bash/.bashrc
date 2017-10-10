@@ -33,6 +33,7 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[0
 
 # Environment
 export PATH=$HOME/Library/Python/2.7/bin/:$PATH
+export PGDATA=~/.pgdata
 
 # Virtual env
 if [ ! -e $HOME/.virtualenvs ]; then
