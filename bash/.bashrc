@@ -18,6 +18,7 @@ alias ggcl='git clone'
 
 # Working aliases
 alias qwe='cd ~/sifive/www-sifive/'
+alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
 alias asd='cd ~/sifive/documentation-experiments/sifivedoc/; workon doc3'
 alias sdf='cd ~/datascience.edu/; workon datascience.edu'
 
