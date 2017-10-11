@@ -65,6 +65,28 @@ if [ ! -e $PYTHONSTARTUP ]; then
     echo "del os, hist" >> $PYTHONSTARTUP
 fi
 
+if [ ! -e $HOME/.vimrc ]; then
+    mkdir -p ~/.vimtmp
+    echo "set nocompatible" > $HOME/.vimrc
+    echo "set backspace=indent,eol,start" >> $HOME/.vimrc
+    echo "set expandtab" >> $HOME/.vimrc
+    echo "set shiftwidth=4" >> $HOME/.vimrc
+    echo "set tabstop=4" >> $HOME/.vimrc
+    echo "set smarttab" >> $HOME/.vimrc
+    echo "set smartindent" >> $HOME/.vimrc
+    echo "set autochdir" >> $HOME/.vimrc
+    echo "set background=dark" >> $HOME/.vimrc
+    echo "set history=50 " >> $HOME/.vimrc
+    echo "set ruler" >> $HOME/.vimrc
+    echo "set showcmd" >> $HOME/.vimrc
+    echo "set incsearch" >> $HOME/.vimrc
+    echo "set nobackup nowritebackup" >> $HOME/.vimrc
+    echo "set dir=>~/.vimtmp" >> $HOME/.vimrc
+    echo "set hlsearch" >> $HOME/.vimrc
+    echo "syntax on" >> $HOME/.vimrc
+    echo "filetype indent plugin on" >> $HOME/.vimrc
+fi
+
 # Vi key bindings etc
 if [ ! -e $HOME/.editrc ]; then
     echo "bind -v" > $HOME/.editrc
