@@ -36,15 +36,16 @@ export PATH=$HOME/Library/Python/2.7/bin/:/Library/Frameworks/Python.framework/V
 export PGDATA=~/.pgdata
 
 # Virtual env
+export WORKON_HOME=$HOME/.virtualenvs/
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 if [ ! -e $HOME/.virtualenvs ]; then
     mkdir -p $HOME/.virtualenvs
 fi
-if [ -e /usr/bin/virtualenvwrapper.sh ]; then
-    source /usr/bin/virtualenvwrapper.sh
-elif [ -e /usr/local/bin/virtualenvwrapper.sh ]; then
+if [ -e /usr/local/bin/virtualenvwrapper.sh ]; then
     source /usr/local/bin/virtualenvwrapper.sh
+elif [ -e /usr/bin/virtualenvwrapper.sh ]; then
+    source /usr/bin/virtualenvwrapper.sh
 fi
-export WORKON_HOME=$HOME/.virtualenvs/
 
 # Python startup
 export PYTHONSTARTUP=$HOME/.pystartup
