@@ -20,7 +20,7 @@ alias ggcl='git clone'
 alias qwe='cd ~/sifive/www-sifive/'
 alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
 alias asd='cd ~/sifive/platform-specs/asciidoc; workon sifive-docs'
-alias sdf='cd ~/datascience.edu/; workon datascience.edu'
+alias sdf='cd ~/intouch; pipenv shell'
 
 # Bash options
 shopt -s histappend
@@ -60,8 +60,7 @@ if [ ! -e $PYTHONSTARTUP ]; then
     echo "    readline.read_history_file(hist)" >> $PYTHONSTARTUP
     echo "except IOError:" >> $PYTHONSTARTUP
     echo "    pass" >> $PYTHONSTARTUP
-    echo "readline.parse_and_bind('bind -v')" >> $PYTHONSTARTUP
-    echo "readline.parse_and_bind('bind ^I rl_complete')" >> $PYTHONSTARTUP
+    echo "readline.parse_and_bind('set editing-mode vi')" >> $PYTHONSTARTUP
     echo "atexit.register(readline.write_history_file, hist)" >> $PYTHONSTARTUP
     echo "del os, hist" >> $PYTHONSTARTUP
 fi
