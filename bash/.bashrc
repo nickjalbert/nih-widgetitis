@@ -20,7 +20,7 @@ alias ggcl='git clone'
 alias qwe='cd ~/sifive/www-sifive/'
 alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
 alias asd='cd ~/sifive/platform-specs/asciidoc; workon sifive-docs'
-alias sdf='cd ~/intouch; pipenv shell'
+alias sdf='cd ~/200words'
 
 # Bash options
 shopt -s histappend
@@ -66,7 +66,7 @@ if [ ! -e $PYTHONSTARTUP ]; then
 fi
 
 if [ ! -e $HOME/.vimrc ]; then
-    mkdir -p ~/.vimtmp
+    mkdir -p $HOME/.vimtmp
     echo "set nocompatible" > $HOME/.vimrc
     echo "set backspace=indent,eol,start" >> $HOME/.vimrc
     echo "set expandtab" >> $HOME/.vimrc
@@ -85,6 +85,10 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "set hlsearch" >> $HOME/.vimrc
     echo "syntax on" >> $HOME/.vimrc
     echo "filetype indent plugin on" >> $HOME/.vimrc
+    # Custom per-language vim settings
+    mkdir -p $HOME/.vim/ftplugin
+    echo "set shiftwidth=2" >> $HOME/.vim/ftplugin/javascript.vim
+    echo "set tabstop=2" >> $HOME/.vim/ftplugin/javascript.vim
 fi
 
 # Vi key bindings etc
