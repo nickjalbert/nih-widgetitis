@@ -87,8 +87,13 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "filetype indent plugin on" >> $HOME/.vimrc
     # Custom per-language vim settings
     mkdir -p $HOME/.vim/ftplugin
+    # Custom JS settings (mostly indent size)
+    echo "set expandtab" >> $HOME/.vim/ftplugin/javascript.vim
     echo "set shiftwidth=2" >> $HOME/.vim/ftplugin/javascript.vim
     echo "set tabstop=2" >> $HOME/.vim/ftplugin/javascript.vim
+    echo "set smarttab" >> $HOME/.vim/ftplugin/javascript.vim
+    echo "set smartindent" >> $HOME/.vim/ftplugin/javascript.vim
+    echo "syntax on" >> $HOME/.vim/ftplugin/javascript.vim
 fi
 
 # Vi key bindings etc
