@@ -96,16 +96,25 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "set tabstop=2" >> $HOME/.vim/ftplugin/javascript.vim
     echo "set smarttab" >> $HOME/.vim/ftplugin/javascript.vim
     echo "set smartindent" >> $HOME/.vim/ftplugin/javascript.vim
-    echo "syntax on" >> $HOME/.vim/ftplugin/javascript.vim
-    # Better vim colors
-    # mkdir -p $HOME/.vim/colors
-    # echo -e "\n=== Downloading solarized colorscheme from https://github.com/altercation/vim-colors-solarized ===\n"
-    # curl https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim > $HOME/.vim/colors/solarized.vim
-    # echo "set background=dark" >> $HOME/.vimrc
-    # echo "colorscheme solarized" >> $HOME/.vimrc
-    # Use Tango Dark for windows terminal for not-too-ugly
-    echo "colorscheme default" >> $HOME/.vimrc
-
+    echo "syntax enable" >> $HOME/.vim/ftplugin/javascript.vim
+    # Ubuntu on Windows Terminal specific settings
+    echo "If you're using Windows Terminal, enable the commented out settings in ~/.vimrc"
+    echo "" >> $HOME/.vimrc
+    echo "\" Uncomment below for Windows Terminal settings" >> $HOME/.vimrc
+    echo "\" Other Windows Terminal changes in its settings.json:" >> $HOME/.vimrc
+    echo "\"   * \"colorScheme\": \"Tango Dark\" (in Ubuntu profile)" >> $HOME/.vimrc
+    echo "\"   * \"cursorShape\": \"filledBox\" (in Ubuntu profile)" >> $HOME/.vimrc
+    echo "\"   * Comment out copy ctrl+c binding in \"actions\" (ctrl+shift+c will work)" >> $HOME/.vimrc
+    echo "\"   * Comment out paste ctrl+v binding in \"actions\" so it doesn't interfere with visual block (ctrl+shift+v will work)" >> $HOME/.vimrc
+    echo "" >> $HOME/.vimrc
+    echo "\" let &t_SI = \"\\e[6 q\"" >> $HOME/.vimrc
+    echo "\" let &t_SR = \"\\e[3 q\"" >> $HOME/.vimrc
+    echo "\" let &t_EI = \"\\e[2 q\"" >> $HOME/.vimrc
+    echo "" >> $HOME/.vimrc
+    echo "\" augroup myCmds" >> $HOME/.vimrc
+    echo "\" au!" >> $HOME/.vimrc
+    echo "\" autocmd VimEnter * silent !echo -ne \"\\e[2 q\"" >> $HOME/.vimrc
+    echo "\" augroup END" >> $HOME/.vimrc
 fi
 
 # Vi key bindings etc
