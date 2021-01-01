@@ -87,10 +87,6 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "set dir=>~/.vimtmp" >> $HOME/.vimrc
     echo "set hlsearch" >> $HOME/.vimrc
     echo "syntax enable" >> $HOME/.vimrc
-    # echo "set background=dark" >> $HOME/.vimrc
-    # echo "colorscheme solarized" >> $HOME/.vimrc
-    # Use Tango Dark for windows terminal
-    echo "colorscheme default" >> $HOME/.vimrc
     echo "filetype indent plugin on" >> $HOME/.vimrc
     # Custom per-language vim settings
     mkdir -p $HOME/.vim/ftplugin
@@ -105,6 +101,11 @@ if [ ! -e $HOME/.vimrc ]; then
     # mkdir -p $HOME/.vim/colors
     # echo -e "\n=== Downloading solarized colorscheme from https://github.com/altercation/vim-colors-solarized ===\n"
     # curl https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim > $HOME/.vim/colors/solarized.vim
+    # echo "set background=dark" >> $HOME/.vimrc
+    # echo "colorscheme solarized" >> $HOME/.vimrc
+    # Use Tango Dark for windows terminal for not-too-ugly
+    echo "colorscheme default" >> $HOME/.vimrc
+
 fi
 
 # Vi key bindings etc
