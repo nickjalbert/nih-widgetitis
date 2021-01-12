@@ -18,3 +18,8 @@ ln -s `pwd`/bash/.bashrc ~/.bashrc
 rm ~/.bash_profile
 ln -s `pwd`/bash/.bash_profile ~/.bash_profile
 ```
+
+### How to password protect a file
+
+Encrypt: `gpg -c [file name]`
+Decrypt: `gpg [encrypted file name]`
