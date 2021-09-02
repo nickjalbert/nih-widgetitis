@@ -49,13 +49,19 @@ def main():
     branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip()
     commit_hash = check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
     if args.compare:
-        check_output(['open', '{}/compare/master...{}'.format(url_base, branch_name)])
+        target_url = '{}/compare/master...{}'.format(url_base, branch_name)
+        print('Opening {}'.format(target_url))
+        check_output(['open', target_url])
 
     elif args.tree:
-        check_output(['open', '{}/tree/{}'.format(url_base, branch_name)])
+        target_url = '{}/tree/{}'.format(url_base, branch_name)
+        print('Opening {}'.format(target_url))
+        check_output(['open', target_url])
 
     elif args.pr:
-        check_output(['open', '{}/pull/new/{}'.format(url_base, branch_name)])
+        target_url = '{}/pull/new/{}'.format(url_base, branch_name)
+        print('Opening {}'.format(target_url))
+        check_output(['open', target_url])
 
     elif args.quick_switch:
         if args.quick_switch == EMPTY:
@@ -72,23 +78,26 @@ def main():
         print_recent_branch_list(args.recent * 10)
 
     elif args.commit:
-        check_output(['open', '%s/commit/%s' % (url_base, commit_hash)])
+        target_url = '{}/commit/{}'.format(url_base, commit_hash)
+        print('Opening {}'.format(target_url))
+        check_output(['open', target_url])
 
     elif args.file:
         if not os.path.isfile(args.file):
             raise Exception('Error: file not found %s' % args.file)
         current_path = os.getcwd()
         while current_path != '/':
-            current_path, prepend = os.path.split(current_path)
-            args.file = os.sep.join([prepend, args.file])
             if os.path.isdir(os.sep.join([current_path, '.git'])):
                 break
+            current_path, prepend = os.path.split(current_path)
+            args.file = os.sep.join([prepend, args.file])
         else:
             raise Exception('Error: could not find git root')
-        url = '%s/blob/%s/%s' % (url_base, branch_name, args.file)
+        target_url = '%s/blob/%s/%s' % (url_base, branch_name, args.file)
         if args.line:
-            url = url + "#L%s" % args.line
-        check_output(['open', url])
+            target_url = target_url + "#L%s" % args.line
+        print('Opening {}'.format(target_url))
+        check_output(['open', target_url])
 
     else:
         parser.print_help()
