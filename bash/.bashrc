@@ -32,7 +32,7 @@ shopt -s checkwinsize
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Environment
-export PATH=$HOME/Library/Python/2.7/bin/:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin:$PATH
 export PGDATA=~/.pgdata
 
 # OS X stops complaining about zsh
