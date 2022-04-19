@@ -2,94 +2,160 @@
 
 # Common git/github tasks at your fingertips
 
-import os
 import argparse
-from subprocess import check_output
+import os
 from collections import namedtuple
-
+from subprocess import check_output
 
 EMPTY = 3337
-BranchListing = namedtuple('BranchListing', ['commit_hash', 'full_ref_path', 'name', 'index'])
+BranchListing = namedtuple(
+    "BranchListing", ["commit_hash", "full_ref_path", "name", "index"]
+)
+
 
 def get_recent_branch_list():
-    recent_branches = check_output(['git', 'for-each-ref', '--sort=-committerdate', 'refs/heads/'])
-    recent_branches = recent_branches.decode().split('\n')
-    recent_branches = [rb.split() for rb in  recent_branches]
-    recent_branches = [ BranchListing(rb[0], rb[2], os.path.basename(rb[2]), i)
-                        for i, rb in enumerate(recent_branches, 1) if len(rb) > 0]
+    recent_branches = check_output(
+        ["git", "for-each-ref", "--sort=-committerdate", "refs/heads/"]
+    )
+    recent_branches = recent_branches.decode().split("\n")
+    recent_branches = [rb.split() for rb in recent_branches]
+    recent_branches = [
+        BranchListing(rb[0], rb[2], os.path.basename(rb[2]), i)
+        for i, rb in enumerate(recent_branches, 1)
+        if len(rb) > 0
+    ]
     return recent_branches
+
 
 def print_recent_branch_list(branch_count):
     for branch_listing in get_recent_branch_list()[:branch_count]:
-        print("{} ({})".format(branch_listing.name, branch_listing.index))
-
+        print(f"{branch_listing.name} ({branch_listing.index})")
 
 
 def main():
     parser = argparse.ArgumentParser(description="github shortcuts")
-    parser.add_argument("--compare", "-c", help="open the github comparison for the branch", action="store_true", default=None)
-    parser.add_argument("--pr", "-p", help="opens the github pull request for the branch", action="store_true", default=None)
-    parser.add_argument("--tree", "-t", help="opens the github tree view for the branch", action="store_true", default=None)
-    parser.add_argument("--recent", "-r", help="lists recently modified branch names", action="count", default=None)
-    parser.add_argument("--commit", "-cl", help="opens a link to the current commit", action="store_true", default=None)
-    parser.add_argument("--file", "-f", help="opens a link to the current file", action="store", default=None)
-    parser.add_argument("--line", "-l", help="Use with -f to link to a specific line", action="store", default=None)
-    parser.add_argument("--quick-switch", "-q", nargs="?", const=EMPTY, help="switch to the branch index (-r)", action="store", default=0)
+    parser.add_argument(
+        "--compare",
+        "-c",
+        help="open the github comparison for the branch",
+        action="store_true",
+        default=None,
+    )
+    parser.add_argument(
+        "--pr",
+        "-p",
+        help="opens the github pull request for the branch",
+        action="store_true",
+        default=None,
+    )
+    parser.add_argument(
+        "--tree",
+        "-t",
+        help="opens the github tree view for the branch",
+        action="store_true",
+        default=None,
+    )
+    parser.add_argument(
+        "--recent",
+        "-r",
+        help="lists recently modified branch names",
+        action="count",
+        default=None,
+    )
+    parser.add_argument(
+        "--commit",
+        "-cl",
+        help="opens a link to the current commit",
+        action="store_true",
+        default=None,
+    )
+    parser.add_argument(
+        "--file",
+        "-f",
+        help="opens a link to the current file",
+        action="store",
+        default=None,
+    )
+    parser.add_argument(
+        "--line",
+        "-l",
+        help="Use with -f to link to a specific line",
+        action="store",
+        default=None,
+    )
+    parser.add_argument(
+        "--quick-switch",
+        "-q",
+        nargs="?",
+        const=EMPTY,
+        help="switch to the branch index (-r)",
+        action="store",
+        default=0,
+    )
     args = parser.parse_args()
 
-    HOST_BASE = 'https://github.com/'
-    remotes = check_output(["git", "remote", "-v"]).decode().strip().split('\n')
-    push_remote = [remote for remote in remotes
-                   if ('push' in remote and 'github' in remote and 'origin' in remote)]
+    HOST_BASE = "https://github.com/"
+    remotes = (
+        check_output(["git", "remote", "-v"]).decode().strip().split("\n")
+    )
+    push_remote = [
+        remote
+        for remote in remotes
+        if ("push" in remote and "github" in remote and "origin" in remote)
+    ]
     repo_url = push_remote[0].split()[1]
     # Hack off github and .git
-    repo = repo_url.split(':')[1][:-4]
+    repo = repo_url.split(":")[1][:-4]
     url_base = HOST_BASE + repo
 
-    branch_name = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode().strip()
-    commit_hash = check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+    branch_name = (
+        check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        .decode()
+        .strip()
+    )
+    commit_hash = check_output(["git", "rev-parse", "HEAD"]).decode().strip()
     if args.compare:
-        target_url = '{}/compare/master...{}'.format(url_base, branch_name)
+        target_url = f"{url_base}/compare/master...{branch_name}"
         _open_url(target_url)
 
     elif args.tree:
-        target_url = '{}/tree/{}'.format(url_base, branch_name)
+        target_url = f"{url_base}/tree/{branch_name}"
         _open_url(target_url)
 
     elif args.pr:
-        target_url = '{}/pull/new/{}'.format(url_base, branch_name)
+        target_url = f"{url_base}/pull/new/{branch_name}"
         _open_url(target_url)
 
     elif args.quick_switch:
         if args.quick_switch == EMPTY:
             print_recent_branch_list(10)
             return
-        branch_name = 'master'
+        branch_name = "master"
         for branch_listing in get_recent_branch_list():
             if branch_listing.index == int(args.quick_switch):
                 branch_name = branch_listing.name
                 break
-        check_output(['git', 'checkout', branch_name])
+        check_output(["git", "checkout", branch_name])
 
     elif args.recent:
         print_recent_branch_list(args.recent * 10)
 
     elif args.commit:
-        target_url = '{}/commit/{}'.format(url_base, commit_hash)
+        target_url = f"{url_base}/commit/{commit_hash}"
         _open_url(target_url)
 
     elif args.file:
         if not os.path.isfile(args.file):
-            raise Exception('Error: file not found %s' % args.file)
+            raise Exception("Error: file not found %s" % args.file)
         current_path = os.getcwd()
-        while current_path != '/':
-            if os.path.isdir(os.sep.join([current_path, '.git'])):
+        while current_path != "/":
+            if os.path.isdir(os.sep.join([current_path, ".git"])):
                 break
             current_path, prepend = os.path.split(current_path)
             args.file = os.sep.join([prepend, args.file])
         else:
-            raise Exception('Error: could not find git root')
-        target_url = '%s/blob/%s/%s' % (url_base, branch_name, args.file)
+            raise Exception("Error: could not find git root")
+        target_url = "{}/blob/{}/{}".format(url_base, branch_name, args.file)
         if args.line:
             target_url = target_url + "#L%s" % args.line
         _open_url(target_url)
@@ -97,15 +163,16 @@ def main():
     else:
         parser.print_help()
 
+
 def _open_url(target_url):
-    print('Opening {}'.format(target_url))
+    print(f"Opening {target_url}")
     try:
         # OS X
-        check_output(['open', target_url])
+        check_output(["open", target_url])
     except PermissionError:
         # Try WSL2?
-        check_output(['cmd.exe', '/C', 'start', target_url])
+        check_output(["cmd.exe", "/C", "start", target_url])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
-
