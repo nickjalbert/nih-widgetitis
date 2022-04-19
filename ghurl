@@ -50,18 +50,15 @@ def main():
     commit_hash = check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
     if args.compare:
         target_url = '{}/compare/master...{}'.format(url_base, branch_name)
-        print('Opening {}'.format(target_url))
-        check_output(['open', target_url])
+        _open_url(target_url)
 
     elif args.tree:
         target_url = '{}/tree/{}'.format(url_base, branch_name)
-        print('Opening {}'.format(target_url))
-        check_output(['open', target_url])
+        _open_url(target_url)
 
     elif args.pr:
         target_url = '{}/pull/new/{}'.format(url_base, branch_name)
-        print('Opening {}'.format(target_url))
-        check_output(['open', target_url])
+        _open_url(target_url)
 
     elif args.quick_switch:
         if args.quick_switch == EMPTY:
@@ -79,8 +76,7 @@ def main():
 
     elif args.commit:
         target_url = '{}/commit/{}'.format(url_base, commit_hash)
-        print('Opening {}'.format(target_url))
-        check_output(['open', target_url])
+        _open_url(target_url)
 
     elif args.file:
         if not os.path.isfile(args.file):
@@ -96,12 +92,19 @@ def main():
         target_url = '%s/blob/%s/%s' % (url_base, branch_name, args.file)
         if args.line:
             target_url = target_url + "#L%s" % args.line
-        print('Opening {}'.format(target_url))
-        check_output(['open', target_url])
+        _open_url(target_url)
 
     else:
         parser.print_help()
 
+def _open_url(target_url):
+    print('Opening {}'.format(target_url))
+    try:
+        # OS X
+        check_output(['open', target_url])
+    except PermissionError:
+        # Try WSL2?
+        check_output(['cmd.exe', '/C', 'start', target_url])
 
 if __name__ == '__main__':
     main()
