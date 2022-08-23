@@ -19,8 +19,9 @@ alias ggcl='git clone'
 # Working aliases
 alias qwe='cd ~/sifive/www-sifive/'
 alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
-alias asd='cd ~/sifive/platform-specs/asciidoc; workon sifive-docs'
-alias sdf='cd ~/200words'
+alias asd='cd ~/agentos/documentation/demos/dependency_inference/; source demo_env/bin/activate'
+alias sdf='cd ~/agentos; source lean-env/bin/activate'
+alias dfg='cd ~/streamlit_test; source env/bin/activate'
 
 # Bash options
 shopt -s histappend
@@ -32,7 +33,15 @@ shopt -s checkwinsize
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Environment
-export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin:$PATH
+if [ ! -e $HOME/diff-so-fancy ]; then
+    if [ -x "$(command -v git)" ]; then
+        echo "Cloning diff-so-fancy to home directory"
+        git clone https://github.com/so-fancy/diff-so-fancy.git $HOME/diff-so-fancy
+    else
+        echo "No git found, cannot clone diff-so-fancy"
+    fi
+fi
+export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin::$HOME/diff-so-fancy/:$PATH
 export PGDATA=~/.pgdata
 
 # OS X stops complaining about zsh
@@ -115,6 +124,12 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "\" au!" >> $HOME/.vimrc
     echo "\" autocmd VimEnter * silent !echo -ne \"\\e[2 q\"" >> $HOME/.vimrc
     echo "\" augroup END" >> $HOME/.vimrc
+    if [ -x "$(command -v git)" ]; then
+        echo "Cloning vim TypeScript syntax highlighting config"
+        git clone https://github.com/leafgarland/typescript-vim.git $HOME/.vim/pack/typescript/start/typescript-vim
+    else
+        echo "No git found, cannot clone TypeScript syntax highlighting config"
+    fi
 fi
 
 # Vi key bindings etc
