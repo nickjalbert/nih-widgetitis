@@ -20,7 +20,7 @@ alias ggcl='git clone'
 alias qwe='cd ~/sifive/www-sifive/'
 alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
 alias asd='cd ~/agentos/documentation/demos/dependency_inference/; source demo_env/bin/activate'
-alias sdf='cd ~/agentos; source lean-env/bin/activate'
+alias sdf='cd ~/frontend; source venv/bin/activate'
 alias dfg='cd ~/streamlit_test; source env/bin/activate'
 
 # Bash options
@@ -106,6 +106,13 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "set smarttab" >> $HOME/.vim/ftplugin/javascript.vim
     echo "set smartindent" >> $HOME/.vim/ftplugin/javascript.vim
     echo "syntax enable" >> $HOME/.vim/ftplugin/javascript.vim
+    # Custom HTML settings (mostly indent size)
+    echo "set expandtab" >> $HOME/.vim/ftplugin/html.vim
+    echo "set shiftwidth=2" >> $HOME/.vim/ftplugin/html.vim
+    echo "set tabstop=2" >> $HOME/.vim/ftplugin/html.vim
+    echo "set smarttab" >> $HOME/.vim/ftplugin/html.vim
+    echo "set smartindent" >> $HOME/.vim/ftplugin/html.vim
+    echo "syntax enable" >> $HOME/.vim/ftplugin/html.vim
     # Ubuntu on Windows Terminal specific settings
     echo "If you're using Windows Terminal, enable the commented out settings in ~/.vimrc"
     echo "" >> $HOME/.vimrc
