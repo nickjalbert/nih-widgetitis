@@ -178,5 +178,3 @@ if [ ! -e $HOME/.gitconfig ]; then
     git config --bool --global diff-so-fancy.changeHunkIndicators true
     git config --bool --global diff-so-fancy.stripLeadingSymbols true
 fi
-
-cd ~
