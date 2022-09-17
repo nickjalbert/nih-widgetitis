@@ -1,0 +1,30 @@
+# Git alias
+alias gga='git add'
+alias ggp='git push origin `git rev-parse --abbrev-ref HEAD`'
+alias ggl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias ggf='git fetch'
+alias ggs='git status'
+alias ggd='git diff'
+alias ggm='git commit -m'
+alias ggma='git commit -am'
+alias ggb='git branch'
+alias ggc='git checkout'
+alias ggra='git remote add'
+alias ggra='git remote add'
+alias ggr='git rebase'
+alias ggpur='git pull --rebase'
+alias ggpun='git pull'
+alias ggcl='git clone'
+
+# Working aliases
+alias sdf='cd ~/workspace/react_deploy/agi; source venv/bin/activate'
+
+# Bash options
+shopt -s histappend
+export HISTIGNORE="ignoredups:&:ls:[bf]g:exit"
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+export EDITOR=vim
+set -o vi
+shopt -s checkwinsize
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\](PROD):\[\033[01;34m\]\w\[\033[00m\]\$ '

@@ -20,7 +20,7 @@ alias ggcl='git clone'
 alias qwe='cd ~/sifive/www-sifive/'
 alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
 alias asd='cd ~/agentos/documentation/demos/dependency_inference/; source demo_env/bin/activate'
-alias sdf='cd ~/frontend; source venv/bin/activate'
+alias sdf='cd ~/agi; cat ../PAT.md; poetry shell'
 alias dfg='cd ~/streamlit_test; source env/bin/activate'
 
 # Bash options
@@ -28,6 +28,7 @@ shopt -s histappend
 export HISTIGNORE="ignoredups:&:ls:[bf]g:exit"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
+export EDITOR=vim
 set -o vi
 shopt -s checkwinsize
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
