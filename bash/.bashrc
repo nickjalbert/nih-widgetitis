@@ -5,6 +5,7 @@ alias ggl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset 
 alias ggf='git fetch'
 alias ggs='git status'
 alias ggd='git diff'
+alias ggh='pre-commit run'
 alias ggm='git commit -m'
 alias ggma='git commit -am'
 alias ggb='git branch'
@@ -18,10 +19,17 @@ alias ggcl='git clone'
 
 # Working aliases
 alias qwe='cd ~/sifive/www-sifive/'
-alias wer="cd ~/sifive/developers-sifive; workon developers-sifive3; source .env"
+alias wer="cd ~/clean/agi; poetry shell"
 alias asd='cd ~/agentos/documentation/demos/dependency_inference/; source demo_env/bin/activate'
-alias sdf='cd ~/agi; cat ../PAT.md; poetry shell'
+alias sdf='cd ~/agi; cat ./TODO.md; cat ../PAT.md; poetry shell'
+alias sss='sudo service postgresql start && sudo service redis-server start && redis-cli FLUSHALL && sudo service nginx start'
+alias ssr='cd ~/agi/web/chat && npm install && WDS_SOCKET_HOST=localhost npm run start'
+alias ssf='cd ~/agi &&  watchexec -r -e py -- python web/serve.py'
+alias ssc='cd ~/agi &&  watchexec -r -e py -- celery -A web.server.celery_app:app worker --loglevel=debug'
 alias dfg='cd ~/streamlit_test; source env/bin/activate'
+alias xx='exit 0'
+alias ff='vim ~/TODO.md'
+alias iam='echo "I am LOCAL"'
 
 # Bash options
 shopt -s histappend
@@ -42,7 +50,7 @@ if [ ! -e $HOME/diff-so-fancy ]; then
         echo "No git found, cannot clone diff-so-fancy"
     fi
 fi
-export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin::$HOME/diff-so-fancy/:$PATH
+export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/usr/local/opt/ruby/bin:$HOME/.gem/ruby/2.7.0/bin::$HOME/diff-so-fancy/:/home/nickj/.cargo/bin:$PATH
 export PGDATA=~/.pgdata
 
 # OS X stops complaining about zsh
@@ -98,6 +106,14 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "set hlsearch" >> $HOME/.vimrc
     echo "syntax enable" >> $HOME/.vimrc
     echo "filetype indent plugin on" >> $HOME/.vimrc
+    # plug.vim plugin manager
+    mkdir -p $HOME/.vim/autoload
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    echo "call plug#begin()" >> $HOME/.vimrc
+    echo "Plug 'neoclide/coc.nvim', {'branch': 'release'}" >> $HOME/.vimrc
+    echo "Plug 'tpope/vim-sensible'" >> $HOME/.vimrc
+    echo "call plug#end()" >> $HOME/.vimrc
     # Custom per-language vim settings
     mkdir -p $HOME/.vim/ftplugin
     # Custom JS settings (mostly indent size)
@@ -132,21 +148,187 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "\" au!" >> $HOME/.vimrc
     echo "\" autocmd VimEnter * silent !echo -ne \"\\e[2 q\"" >> $HOME/.vimrc
     echo "\" augroup END" >> $HOME/.vimrc
-    if [ -x "$(command -v git)" ]; then
-        echo "Cloning vim TypeScript syntax highlighting config"
-        git clone https://github.com/leafgarland/typescript-vim.git $HOME/.vim/pack/typescript/start/typescript-vim
-        # Force our preferred indent
-        echo "" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "set expandtab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "set shiftwidth=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "set tabstop=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "set smarttab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "set smartindent" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-        echo "syntax enable" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    echo "" >> $HOME/.vimrc
+    # Code completion (COC) configuration
+    echo "\" COC Config from: https://github.com/neoclide/coc.nvim#example-vim-configuration" >> $HOME/.vimrc
+    echo "\" Run:" >> $HOME/.vimrc
+    echo "\" :PlugInstall" >> $HOME/.vimrc
+    echo "\" :CocInstall coc-json coc-tsserver coc-pyright" >> $HOME/.vimrc
+    echo '" May need for vim (not neovim) since coc.nvim calculate byte offset by count' >> $HOME/.vimrc
+    echo '" utf-8 byte sequence.' >> $HOME/.vimrc
+    echo 'set encoding=utf-8' >> $HOME/.vimrc
+    echo '" Some servers have issues with backup files, see #649.' >> $HOME/.vimrc
+    echo 'set nobackup' >> $HOME/.vimrc
+    echo 'set nowritebackup' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable' >> $HOME/.vimrc
+    echo '" delays and poor user experience.' >> $HOME/.vimrc
+    echo 'set updatetime=300' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Always show the signcolumn, otherwise it would shift the text each time' >> $HOME/.vimrc
+    echo '" diagnostics appear/become resolved.' >> $HOME/.vimrc
+    echo 'set signcolumn=yes' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Use tab for trigger completion with characters ahead and navigate.' >> $HOME/.vimrc
+    echo '" NOTE: There iss always complete item selected by default, you may want to enable' >> $HOME/.vimrc
+    echo '" no select by suggest.noselect: true in your configuration file.' >> $HOME/.vimrc
+    echo '" NOTE: Use command :verbose imap <tab> to make sure tab is not mapped by' >> $HOME/.vimrc
+    echo '" other plugin before putting this into your config.' >> $HOME/.vimrc
+    echo 'inoremap <silent><expr> <TAB>' >> $HOME/.vimrc
+    echo '      \ coc#pum#visible() ? coc#pum#next(1) :' >> $HOME/.vimrc
+    echo '      \ CheckBackspace() ? "\<Tab>" :' >> $HOME/.vimrc
+    echo '      \ coc#refresh()' >> $HOME/.vimrc
+    echo 'inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Make <CR> to accept selected completion item or notify coc.nvim to format' >> $HOME/.vimrc
+    echo '" <C-g>u breaks current undo, please make your own choice.' >> $HOME/.vimrc
+    echo 'inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()' >> $HOME/.vimrc
+    echo '                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo 'function! CheckBackspace() abort' >> $HOME/.vimrc
+    echo '  let col = col('.') - 1' >> $HOME/.vimrc
+    echo '  return !col || getline('.')[col - 1]  =~# '\s'' >> $HOME/.vimrc
+    echo 'endfunction' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Use <c-space> to trigger completion.' >> $HOME/.vimrc
+    echo 'if has('"'"'nvim'"'"')' >> $HOME/.vimrc
+    echo '  inoremap <silent><expr> <c-space> coc#refresh()' >> $HOME/.vimrc
+    echo 'else' >> $HOME/.vimrc
+    echo '  inoremap <silent><expr> <c-@> coc#refresh()' >> $HOME/.vimrc
+    echo 'endif' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Use `[g` and `]g` to navigate diagnostics' >> $HOME/.vimrc
+    echo '" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.' >> $HOME/.vimrc
+    echo 'nmap <silent> [g <Plug>(coc-diagnostic-prev)' >> $HOME/.vimrc
+    echo 'nmap <silent> ]g <Plug>(coc-diagnostic-next)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" GoTo code navigation.' >> $HOME/.vimrc
+    echo 'nmap <silent> gd <Plug>(coc-definition)' >> $HOME/.vimrc
+    echo 'nmap <silent> gy <Plug>(coc-type-definition)' >> $HOME/.vimrc
+    echo 'nmap <silent> gi <Plug>(coc-implementation)' >> $HOME/.vimrc
+    echo 'nmap <silent> gr <Plug>(coc-references)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Use K to show documentation in preview window.' >> $HOME/.vimrc
+    echo 'nnoremap <silent> K :call ShowDocumentation()<CR>' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo 'function! ShowDocumentation()' >> $HOME/.vimrc
+    echo '  if CocAction('hasProvider', 'hover')' >> $HOME/.vimrc
+    echo '    call CocActionAsync('doHover')' >> $HOME/.vimrc
+    echo '  else' >> $HOME/.vimrc
+    echo '    call feedkeys('K', 'in')' >> $HOME/.vimrc
+    echo '  endif' >> $HOME/.vimrc
+    echo 'endfunction' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Highlight the symbol and its references when holding the cursor.' >> $HOME/.vimrc
+    echo 'autocmd CursorHold * silent call CocActionAsync('"'"'highlight'"'"')' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Symbol renaming.' >> $HOME/.vimrc
+    echo 'nmap <leader>rn <Plug>(coc-rename)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Formatting selected code.' >> $HOME/.vimrc
+    echo 'xmap <leader>f  <Plug>(coc-format-selected)' >> $HOME/.vimrc
+    echo 'nmap <leader>f  <Plug>(coc-format-selected)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo 'augroup mygroup' >> $HOME/.vimrc
+    echo '  autocmd!' >> $HOME/.vimrc
+    echo '  " Setup formatexpr specified filetype(s).' >> $HOME/.vimrc
+    echo '  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')' >> $HOME/.vimrc
+    echo '  " Update signature help on jump placeholder.' >> $HOME/.vimrc
+    echo '  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')' >> $HOME/.vimrc
+    echo 'augroup end' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Applying codeAction to the selected region.' >> $HOME/.vimrc
+    echo '" Example: `<leader>aap` for current paragraph' >> $HOME/.vimrc
+    echo 'xmap <leader>a  <Plug>(coc-codeaction-selected)' >> $HOME/.vimrc
+    echo 'nmap <leader>a  <Plug>(coc-codeaction-selected)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Remap keys for applying codeAction to the current buffer.' >> $HOME/.vimrc
+    echo 'nmap <leader>ac  <Plug>(coc-codeaction)' >> $HOME/.vimrc
+    echo '" Apply AutoFix to problem on the current line.' >> $HOME/.vimrc
+    echo 'nmap <leader>qf  <Plug>(coc-fix-current)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Remap keys for refactor code actions.' >> $HOME/.vimrc
+    echo 'nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)' >> $HOME/.vimrc
+    echo 'xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)' >> $HOME/.vimrc
+    echo 'nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Run the Code Lens action on the current line.' >> $HOME/.vimrc
+    echo 'nmap <leader>cl  <Plug>(coc-codelens-action)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Map function and class text objects' >> $HOME/.vimrc
+    echo '" NOTE: Requires 'textDocument.documentSymbol' support from the language server.' >> $HOME/.vimrc
+    echo 'xmap if <Plug>(coc-funcobj-i)' >> $HOME/.vimrc
+    echo 'omap if <Plug>(coc-funcobj-i)' >> $HOME/.vimrc
+    echo 'xmap af <Plug>(coc-funcobj-a)' >> $HOME/.vimrc
+    echo 'omap af <Plug>(coc-funcobj-a)' >> $HOME/.vimrc
+    echo 'xmap ic <Plug>(coc-classobj-i)' >> $HOME/.vimrc
+    echo 'omap ic <Plug>(coc-classobj-i)' >> $HOME/.vimrc
+    echo 'xmap ac <Plug>(coc-classobj-a)' >> $HOME/.vimrc
+    echo 'omap ac <Plug>(coc-classobj-a)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Remap <C-f> and <C-b> for scroll float windows/popups.' >> $HOME/.vimrc
+    echo 'if has('"'"'nvim-0.4.0'"'"') || has('"'"'patch-8.2.0750'"'"')' >> $HOME/.vimrc
+    echo '  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"' >> $HOME/.vimrc
+    echo '  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"' >> $HOME/.vimrc
+    echo '  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"' >> $HOME/.vimrc
+    echo '  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"' >> $HOME/.vimrc
+    echo '  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"' >> $HOME/.vimrc
+    echo '  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"' >> $HOME/.vimrc
+    echo 'endif' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Use CTRL-S for selections ranges.' >> $HOME/.vimrc
+    echo '" Requires 'textDocument/selectionRange' support of language server.' >> $HOME/.vimrc
+    echo 'nmap <silent> <C-s> <Plug>(coc-range-select)' >> $HOME/.vimrc
+    echo 'xmap <silent> <C-s> <Plug>(coc-range-select)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Add `:Format` command to format current buffer.' >> $HOME/.vimrc
+    echo 'command! -nargs=0 Format :call CocActionAsync('format')' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Add `:Fold` command to fold current buffer.' >> $HOME/.vimrc
+    echo 'command! -nargs=? Fold :call     CocAction('fold', <f-args>)' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Add `:OR` command for organize imports of the current buffer.' >> $HOME/.vimrc
+    echo 'command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Add (Neo)Vim native statusline support.' >> $HOME/.vimrc
+    echo '" NOTE: Please see :h coc-status for integrations with external plugins that' >> $HOME/.vimrc
+    echo '" provide custom statusline: lightline.vim, vim-airline.' >> $HOME/.vimrc
+    echo '' >> $HOME/.vimrc
+    echo '" Mappings for CoCList' >> $HOME/.vimrc
+    echo '" Show all diagnostics.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>' >> $HOME/.vimrc
+    echo '" Manage extensions.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>' >> $HOME/.vimrc
+    echo '" Show commands.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>' >> $HOME/.vimrc
+    echo '" Find symbol of current document.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>' >> $HOME/.vimrc
+    echo '" Search workspace symbols.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>' >> $HOME/.vimrc
+    echo '" Do default action for next item.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>' >> $HOME/.vimrc
+    echo '" Do default action for previous item.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>' >> $HOME/.vimrc
+    echo '" Resume latest coc list.' >> $HOME/.vimrc
+    echo 'nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>' >> $HOME/.vimrc
+    echo "Run the following on vim startup:"
+    echo ":PlugInstall"
+    echo ":CocInstall coc-json coc-tsserver coc-pyright"
+    #if [ -x "$(command -v git)" ]; then
+    #    echo "Cloning vim TypeScript syntax highlighting config"
+    #    git clone https://github.com/leafgarland/typescript-vim.git $HOME/.vim/pack/typescript/start/typescript-vim
+    #    # Force our preferred indent
+    #    echo "" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "set expandtab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "set shiftwidth=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "set tabstop=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "set smarttab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "set smartindent" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    #    echo "syntax enable" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
 
-    else
-        echo "No git found, cannot clone TypeScript syntax highlighting config"
-    fi
+    #else
+    #    echo "No git found, cannot clone TypeScript syntax highlighting config"
+    #fi
 fi
 
 # Vi key bindings etc
@@ -178,3 +360,9 @@ if [ ! -e $HOME/.gitconfig ]; then
     git config --bool --global diff-so-fancy.changeHunkIndicators true
     git config --bool --global diff-so-fancy.stripLeadingSymbols true
 fi
+
+#cd ~
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
