@@ -316,21 +316,29 @@ if [ ! -e $HOME/.vimrc ]; then
     echo "Run the following on vim startup:"
     echo ":PlugInstall"
     echo ":CocInstall coc-json coc-tsserver coc-pyright"
-    #if [ -x "$(command -v git)" ]; then
-    #    echo "Cloning vim TypeScript syntax highlighting config"
-    #    git clone https://github.com/leafgarland/typescript-vim.git $HOME/.vim/pack/typescript/start/typescript-vim
-    #    # Force our preferred indent
-    #    echo "" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "set expandtab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "set shiftwidth=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "set tabstop=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "set smarttab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "set smartindent" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
-    #    echo "syntax enable" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+    if [ -x "$(command -v git)" ]; then
+        echo "Cloning vim TypeScript syntax highlighting config"
+        git clone https://github.com/leafgarland/typescript-vim.git $HOME/.vim/pack/typescript/start/typescript-vim
+        # Force our preferred indent
+        echo "" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "set expandtab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "set shiftwidth=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "set tabstop=2" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "set smarttab" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "set smartindent" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
+        echo "syntax enable" >> $HOME/.vim/pack/typescript/start/typescript-vim/ftplugin/typescript.vim
 
-    #else
-    #    echo "No git found, cannot clone TypeScript syntax highlighting config"
-    #fi
+    else
+        echo "No git found, cannot clone TypeScript syntax highlighting config"
+    fi
+    vim +'PlugInstall --sync' +qa
+    # Install Coc dependencies
+    # https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#automation-script
+    mkdir -p ~/.config/coc/extensions
+    cd ~/.config/coc/extensions
+    rm package.json
+    npm install coc-json coc-tsserver coc-pyright
+    cd
 fi
 
 # Vi key bindings etc
