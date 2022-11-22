@@ -1,4 +1,4 @@
-# Git alias
+ Git alias
 alias gga='git add'
 alias ggp='git push origin `git rev-parse --abbrev-ref HEAD`'
 alias ggl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
@@ -293,7 +293,8 @@ if [ ! -e $HOME/.vimrc ]; then
     echo '" Add (Neo)Vim native statusline support.' >> $HOME/.vimrc
     echo '" NOTE: Please see :h coc-status for integrations with external plugins that' >> $HOME/.vimrc
     echo '" provide custom statusline: lightline.vim, vim-airline.' >> $HOME/.vimrc
-    echo 'set statusline^=%{coc#status()}%{get(b:,'"'"'coc_current_function'"'"','"'"''"'"')}' >> $HOME/.vimrc
+    echo 'set statusline=%f\ \ %h%w%m%r\ %{coc#status()}\ %{get(b:,'"'"'coc_current_function'"'"','"'"''"'"')}%=%-14.(%l/%L,%c%V%)\ %P' >> $HOME/.vimrc
+    #echo 'set statusline^=%{coc#status()}%{get(b:,'"'"'coc_current_function'"'"','"'"''"'"')}' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Mappings for CoCList' >> $HOME/.vimrc
     echo '" Show all diagnostics.' >> $HOME/.vimrc
