@@ -186,8 +186,8 @@ if [ ! -e $HOME/.vimrc ]; then
     echo '                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo 'function! CheckBackspace() abort' >> $HOME/.vimrc
-    echo '  let col = col('.') - 1' >> $HOME/.vimrc
-    echo '  return !col || getline('.')[col - 1]  =~# '\s'' >> $HOME/.vimrc
+    echo '  let col = col('"'"'.'"'"') - 1' >> $HOME/.vimrc
+    echo '  return !col || getline('"'"'.'"'"')[col - 1]  =~# '"'"'\s'"'"'' >> $HOME/.vimrc
     echo 'endfunction' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Use <c-space> to trigger completion.' >> $HOME/.vimrc
@@ -212,10 +212,10 @@ if [ ! -e $HOME/.vimrc ]; then
     echo 'nnoremap <silent> K :call ShowDocumentation()<CR>' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo 'function! ShowDocumentation()' >> $HOME/.vimrc
-    echo '  if CocAction('hasProvider', 'hover')' >> $HOME/.vimrc
-    echo '    call CocActionAsync('doHover')' >> $HOME/.vimrc
+    echo '  if CocAction('"'"'hasProvider'"'"', '"'"'hover'"'"')' >> $HOME/.vimrc
+    echo '    call CocActionAsync('"'"'doHover'"'"')' >> $HOME/.vimrc
     echo '  else' >> $HOME/.vimrc
-    echo '    call feedkeys('K', 'in')' >> $HOME/.vimrc
+    echo '    call feedkeys('"'"'K'"'"', '"'"'in'"'"')' >> $HOME/.vimrc
     echo '  endif' >> $HOME/.vimrc
     echo 'endfunction' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
@@ -232,9 +232,9 @@ if [ ! -e $HOME/.vimrc ]; then
     echo 'augroup mygroup' >> $HOME/.vimrc
     echo '  autocmd!' >> $HOME/.vimrc
     echo '  " Setup formatexpr specified filetype(s).' >> $HOME/.vimrc
-    echo '  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')' >> $HOME/.vimrc
+    echo '  autocmd FileType typescript,json setl formatexpr=CocAction('"'"'formatSelected'"'"')' >> $HOME/.vimrc
     echo '  " Update signature help on jump placeholder.' >> $HOME/.vimrc
-    echo '  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')' >> $HOME/.vimrc
+    echo '  autocmd User CocJumpPlaceholder call CocActionAsync('"'"'showSignatureHelp'"'"')' >> $HOME/.vimrc
     echo 'augroup end' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Applying codeAction to the selected region.' >> $HOME/.vimrc
@@ -282,17 +282,18 @@ if [ ! -e $HOME/.vimrc ]; then
     echo 'xmap <silent> <C-s> <Plug>(coc-range-select)' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Add `:Format` command to format current buffer.' >> $HOME/.vimrc
-    echo 'command! -nargs=0 Format :call CocActionAsync('format')' >> $HOME/.vimrc
+    echo 'command! -nargs=0 Format :call CocActionAsync('"'"'format'"'"')' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Add `:Fold` command to fold current buffer.' >> $HOME/.vimrc
-    echo 'command! -nargs=? Fold :call     CocAction('fold', <f-args>)' >> $HOME/.vimrc
+    echo 'command! -nargs=? Fold :call     CocAction('"'"'fold'"'"', <f-args>)' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Add `:OR` command for organize imports of the current buffer.' >> $HOME/.vimrc
-    echo 'command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')' >> $HOME/.vimrc
+    echo 'command! -nargs=0 OR   :call     CocActionAsync('"'"'runCommand'"'"', '"'"'editor.action.organizeImport'"'"')' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Add (Neo)Vim native statusline support.' >> $HOME/.vimrc
     echo '" NOTE: Please see :h coc-status for integrations with external plugins that' >> $HOME/.vimrc
     echo '" provide custom statusline: lightline.vim, vim-airline.' >> $HOME/.vimrc
+    echo 'set statusline^=%{coc#status()}%{get(b:,'"'"'coc_current_function'"'"','"'"''"'"')}' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Mappings for CoCList' >> $HOME/.vimrc
     echo '" Show all diagnostics.' >> $HOME/.vimrc
