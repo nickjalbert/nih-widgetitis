@@ -1,4 +1,4 @@
- Git alias
+# Git alias
 alias gga='git add'
 alias ggp='git push origin `git rev-parse --abbrev-ref HEAD`'
 alias ggl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
