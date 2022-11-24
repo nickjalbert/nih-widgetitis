@@ -336,7 +336,11 @@ if [ ! -e $HOME/.vimrc ]; then
     # https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#automation-script
     mkdir -p ~/.config/coc/extensions
     cd ~/.config/coc/extensions
-    rm package.json
+    rm -f package.json
+    if [ ! -f package.json ]
+    then
+        echo '{"dependencies":{}}'> package.json
+    fi
     npm install coc-json coc-tsserver coc-pyright
     cd
 fi
