@@ -211,6 +211,8 @@ if [ ! -e $HOME/.vimrc ]; then
     echo 'nmap <silent> gy <Plug>(coc-type-definition)' >> $HOME/.vimrc
     echo 'nmap <silent> gi <Plug>(coc-implementation)' >> $HOME/.vimrc
     echo 'nmap <silent> gr <Plug>(coc-references)' >> $HOME/.vimrc
+    echo 'nmap <silent> gf  <Plug>(coc-fix-current)' >> $HOME/.vimrc
+    echo 'nmap <silent> gh  <Plug>(coc-codeaction-cursor)' >> $HOME/.vimrc
     echo '' >> $HOME/.vimrc
     echo '" Use K to show documentation in preview window.' >> $HOME/.vimrc
     echo 'nnoremap <silent> K :call ShowDocumentation()<CR>' >> $HOME/.vimrc
