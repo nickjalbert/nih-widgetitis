@@ -30,6 +30,7 @@ alias dfg='cd ~/streamlit_test; source env/bin/activate'
 alias xx='exit 0'
 alias ff='vim ~/TODO.md'
 alias iam='echo "I am LOCAL"'
+alias synctime='sudo service ntp stop && sudo ntpd -gq && sudo service ntp start'
 
 # Bash options
 shopt -s histappend
