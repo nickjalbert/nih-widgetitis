@@ -37,7 +37,8 @@ shopt -s histappend
 export HISTIGNORE="ignoredups:&:ls:[bf]g:exit"
 export HISTSIZE=100000
 export HISTFILESIZE=200000
-export EDITOR=vim
+export EDITOR=/usr/local/bin/vim
+export VISUAL=/usr/local/bin/vim
 set -o vi
 shopt -s checkwinsize
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
