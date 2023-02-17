@@ -20,7 +20,7 @@ def get_recent_branch_list():
     recent_branches = recent_branches.decode().split("\n")
     recent_branches = [rb.split() for rb in recent_branches]
     recent_branches = [
-        BranchListing(rb[0], rb[2], os.path.basename(rb[2]), i)
+        BranchListing(rb[0], rb[2], os.path.relpath(rb[2], 'refs/heads'), i)
         for i, rb in enumerate(recent_branches, 1)
         if len(rb) > 0
     ]
