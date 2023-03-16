@@ -27,6 +27,7 @@ alias ssr='cd ~/agi/web/chat && npm install && WDS_SOCKET_HOST=localhost npm run
 alias ssf='cd ~/agi &&  watchexec -r -e py -- python web/serve.py'
 alias ssc='cd ~/agi &&  watchexec -r -e py -- celery -A web.server.celery_app:app worker --loglevel=debug'
 alias dfg='cd ~/streamlit_test; source env/bin/activate'
+alias tunnel='sshuttle -r dev 0.0.0.0/0 --dns'
 alias xx='exit 0'
 alias ff='vim ~/TODO.md'
 alias iam='echo "I am LOCAL"'
